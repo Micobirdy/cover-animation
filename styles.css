@@ -1,0 +1,31 @@
+#website-qr-code {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 256px;
+  height: 256px;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+#website-qr-code img {
+  margin-bottom: 10px;
+}
+
+#website-qr-code div {
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#website-qr-code div:last-child {
+  font-weight: bold;
+}

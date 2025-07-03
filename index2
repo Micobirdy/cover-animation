@@ -1,0 +1,86 @@
+// Figma Plugin: Design System Health Score
+
+// Main function to run the plugin
+function run() {
+  // Check if there's a selection
+  if (figma.currentPage.selection.length === 0) {
+    figma.notify("Please select a component or component set to evaluate.");
+    figma.closePlugin();
+    return;
+  }
+
+  const selection = figma.currentPage.selection[0];
+  
+  if (selection.type !== "COMPONENT" && selection.type !== "COMPONENT_SET") {
+    figma.notify("Please select a component or component set to evaluate.");
+    figma.closePlugin();
+    return;
+  }
+
+  const healthScore = evaluateComponentHealth(selection);
+  
+  // Create a new node to display the health score
+  const scoreNode = figma.createText();
+  scoreNode.characters = `Design System Health Score: ${healthScore}/100`;
+  scoreNode.x = selection.x;
+  scoreNode.y = selection.y + selection.height + 20;
+
+  figma.currentPage.appendChild(scoreNode);
+  figma.viewport.scrollAndZoomIntoView([scoreNode]);
+
+  figma.notify(`Health Score: ${healthScore}/100`);
+  figma.closePlugin();
+}
+
+// Function to evaluate component health
+function evaluateComponentHealth(component) {
+  let score = 100;
+
+  // Check for naming convention (e.g., "ComponentName/Variant")
+  if (!component.name.includes("/")) {
+    score -= 20;
+  }
+
+  // Check for description
+  if (!component.description) {
+    score -= 15;
+  }
+
+  // Check for proper use of constraints
+  if (component.type === "COMPONENT") {
+    score -= checkConstraints(component);
+  } else if (component.type === "COMPONENT_SET") {
+    const variants = component.children;
+    let constraintScore = 0;
+    variants.forEach(variant => {
+      constraintScore += checkConstraints(variant);
+    });
+    score -= constraintScore / variants.length;
+  }
+
+  // Check for use of styles (color, text, effect)
+  score -= checkStyles(component);
+
+  // Ensure score is between 0 and 100
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
+function checkConstraints(node) {
+  let penaltyScore = 0;
+  if (node.constraints.horizontal === "SCALE" || node.constraints.vertical === "SCALE") {
+    penaltyScore += 10;
+  }
+  return penaltyScore;
+}
+
+function checkStyles(node) {
+  let penaltyScore = 0;
+  if (!node.fillStyleId) penaltyScore += 5;
+  if (!node.strokeStyleId) penaltyScore += 5;
+  if (!node.effectStyleId) penaltyScore += 5;
+  if (node.type === "TEXT" && !node.textStyleId) penaltyScore += 10;
+  return penaltyScore;
+}
+
+// Run the plugin
+run();

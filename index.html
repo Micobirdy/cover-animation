@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wegic Chat Demo</title>
+    <style>
+        body {
+            margin: 0;
+            background: #0f0f0f;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        .main-card {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background: #0f0f0f;
+            border-radius: 36px;
+            box-shadow: 0 3.5px 7px 0px inset rgba(255,255,255,0.2);
+            overflow: clip;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-anim-bg {
+            position: absolute;
+            left: 50%;
+            top: 73px;
+            width: 442px;
+            height: 117px;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        .chat-anim-mask {
+            position: absolute;
+            left: 79px;
+            top: 73px;
+            width: 442px;
+            height: 117px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .chat-anim-mask .color-sweep {
+            position: absolute;
+            top: -4px;
+            width: 74px;
+            height: 246px;
+            border-radius: 9999px;
+            will-change: left;
+            animation: sweep 2.8s linear infinite;
+            mask-image: url('http://localhost:3845/assets/c53a23836c56970a98ee4059a6a4ad0407a28b94.svg');
+            -webkit-mask-image: url('http://localhost:3845/assets/c53a23836c56970a98ee4059a6a4ad0407a28b94.svg');
+            mask-size: 442px 117px;
+            -webkit-mask-size: 442px 117px;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            mask-position: 0 0;
+            -webkit-mask-position: 0 0;
+        }
+        .color-sweep.s1 { left: 77.5px; background: #d0ff6b; animation-delay: 0s; }
+        .color-sweep.s2 { left: 151.68px; background: #ffeb6b; animation-delay: 0.3s; }
+        .color-sweep.s3 { left: 225.84px; background: #ffce6b; animation-delay: 0.6s; }
+        .color-sweep.s4 { left: 300px; background: #ffa16b; animation-delay: 0.9s; }
+        .color-sweep.s5 { left: 374.17px; background: #ff84a6; animation-delay: 1.2s; }
+        .color-sweep.s6 { left: 448.33px; background: #fe523e; animation-delay: 1.5s; }
+        @keyframes sweep {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .chat-anim-bg img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .main-title {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #fff;
+            z-index: 3;
+            letter-spacing: 0;
+            line-height: 1.1;
+            pointer-events: none;
+            user-select: none;
+        }
+        .main-btn-wrap {
+            position: absolute;
+            left: 50%;
+            top: calc(50% + 82.5px);
+            transform: translateX(-50%) translateY(-50%);
+            z-index: 4;
+            max-width: 311px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .main-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            background: #0f0f0f;
+            border: none;
+            border-radius: 9999px;
+            padding: 12px 32px;
+            cursor: pointer;
+            outline: none;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            transition: box-shadow 0.2s;
+        }
+        .main-btn:before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 9999px;
+            border: 2px solid #a14af8;
+            pointer-events: none;
+            z-index: 2;
+            transition: border-color 0.2s;
+        }
+        .main-btn:active {
+            box-shadow: 0 0 0 2px #a14af8;
+        }
+        .main-btn .emoji {
+            margin-right: 8px;
+            font-size: 1.1em;
+        }
+        /* Chat space */
+        #chat-space {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: #181c27;
+            border-radius: 32px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+            max-width: 480px;
+            width: 96vw;
+            min-height: 70vh;
+            margin: 0 auto;
+            padding: 0 0 24px 0;
+            position: relative;
+        }
+        #chat-messages {
+            flex: 1;
+            width: 100%;
+            padding: 2.2rem 1.2rem 1.2rem 1.2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .bubble {
+            max-width: 80%;
+            padding: 0.9rem 1.3rem;
+            border-radius: 1.5rem;
+            font-size: 1.08rem;
+            line-height: 1.7;
+            word-break: break-word;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            position: relative;
+        }
+        .bubble.user {
+            align-self: flex-end;
+            background: linear-gradient(90deg, #4f8cff 60%, #357ae8 100%);
+            color: #fff;
+            border-bottom-right-radius: 0.3rem;
+        }
+        .bubble.ai {
+            align-self: flex-start;
+            background: #23283a;
+            color: #e3e6ee;
+            border-bottom-left-radius: 0.3rem;
+            border: 1px solid #353b4d;
+        }
+        #chat-form {
+            display: flex;
+            width: 100%;
+            padding: 0.7rem 1.2rem 0 1.2rem;
+            background: none;
+            border: none;
+            margin-top: auto;
+        }
+        #chat-input {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border-radius: 1.5rem;
+            border: 1px solid #353b4d;
+            font-size: 1rem;
+            outline: none;
+            background: #23283a;
+            color: #e3e6ee;
+            margin-right: 0.7rem;
+        }
+        #send-btn {
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            border-radius: 1.5rem;
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #send-btn:hover {
+            background: #357ae8;
+        }
+        @media (max-width: 700px) {
+            .main-card { width: 98vw; height: 340px; border-radius: 18px; }
+            .main-title { font-size: 1.3rem; top: 32px; }
+            .main-btn-wrap { top: calc(50% + 60px); }
+            .chat-anim-bg, .chat-anim-mask { left: 50%; width: 90vw; min-width: 220px; max-width: 98vw; }
+            #chat-space { border-radius: 16px; padding-bottom: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card" id="main-card">
+        <div class="main-title">
+            "Hi there , let me<br>
+            show you what Wegic<br>
+            can do."
+        </div>
+        <div class="chat-anim-bg">
+            <img src="http://localhost:3845/assets/990b9db0d35a431112bf9bf60a0c168ecf3341ba.svg" alt="chat-bg" />
+        </div>
+        <div class="chat-anim-mask">
+            <div class="color-sweep s1"></div>
+            <div class="color-sweep s2"></div>
+            <div class="color-sweep s3"></div>
+            <div class="color-sweep s4"></div>
+            <div class="color-sweep s5"></div>
+            <div class="color-sweep s6"></div>
+        </div>
+        <div class="main-btn-wrap">
+            <button class="main-btn" id="start-btn">
+                <span class="emoji">💙</span> Let's chat
+            </button>
+        </div>
+    </div>
+
+    <div id="chat-space">
+        <div id="chat-messages"></div>
+        <form id="chat-form" autocomplete="off">
+            <input id="chat-input" type="text" placeholder="Type your message..." autocomplete="off" required />
+            <button id="send-btn" type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        // 首页按钮切换到 chat
+        const startBtn = document.getElementById('start-btn');
+        const mainCard = document.getElementById('main-card');
+        const chatSpace = document.getElementById('chat-space');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        chatSpace.style.display = 'none';
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                mainCard.style.display = 'none';
+                chatSpace.style.display = 'flex';
+                chatInput.focus();
+            });
+        }
+        function appendMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = 'bubble ' + sender;
+            div.innerText = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        function mockAIReply(userText) {
+            if (/hello|hi|你好/i.test(userText)) {
+                return 'Hello! How can I help you today?';
+            } else if (/who|你是谁/i.test(userText)) {
+                return 'I am Wegic, your AI assistant.';
+            } else if (/bye|再见/i.test(userText)) {
+                return 'Goodbye! Have a nice day!';
+            } else {
+                const replies = [
+                    'Interesting question! Let me think...',
+                    'I am still learning. Could you rephrase?',
+                    'That sounds great!',
+                    'Hmm, I see.',
+                    'Can you tell me more?'
+                ];
+                return replies[Math.floor(Math.random() * replies.length)];
+            }
+        }
+        if (chatForm) {
+            chatForm.addEventListener('submit', e => {
+                e.preventDefault();
+                const userText = chatInput.value.trim();
+                if (!userText) return;
+                appendMessage(userText, 'user');
+                chatInput.value = '';
+                setTimeout(() => {
+                    appendMessage(mockAIReply(userText), 'ai');
+                }, 600 + Math.random() * 400);
+            });
+        }
+    </script>
+</body>
+</html>
