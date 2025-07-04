@@ -3,318 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wegic Chat Demo</title>
+    <title>Wegic Introduction</title>
     <style>
+        /* 全局样式 */
         body {
             margin: 0;
-            background: #0f0f0f;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f0f0;
         }
-        .main-card {
-            position: relative;
-            width: 600px;
+        
+        /* 主卡片容器 */
+        .card {
+            width: 100%;
+            max-width: 800px;
             height: 400px;
-            background: #0f0f0f;
-            border-radius: 36px;
-            box-shadow: 0 3.5px 7px 0px inset rgba(255,255,255,0.2);
-            overflow: clip;
+            background-color: #121212;
+            border-radius: 24px;
+            padding: 50px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
-        .chat-anim-bg {
-            position: absolute;
-            left: 50%;
-            top: 73px;
-            width: 442px;
-            height: 117px;
-            transform: translateX(-50%);
-            z-index: 1;
-        }
-        .chat-anim-mask {
-            position: absolute;
-            left: 79px;
-            top: 73px;
-            width: 442px;
-            height: 117px;
-            z-index: 2;
-            pointer-events: none;
-        }
-        .chat-anim-mask .color-sweep {
-            position: absolute;
-            top: -4px;
-            width: 74px;
-            height: 246px;
-            border-radius: 9999px;
-            will-change: left;
-            animation: sweep 2.8s linear infinite;
-            mask-image: url('http://localhost:3845/assets/c53a23836c56970a98ee4059a6a4ad0407a28b94.svg');
-            -webkit-mask-image: url('http://localhost:3845/assets/c53a23836c56970a98ee4059a6a4ad0407a28b94.svg');
-            mask-size: 442px 117px;
-            -webkit-mask-size: 442px 117px;
-            mask-repeat: no-repeat;
-            -webkit-mask-repeat: no-repeat;
-            mask-position: 0 0;
-            -webkit-mask-position: 0 0;
-        }
-        .color-sweep.s1 { left: 77.5px; background: #d0ff6b; animation-delay: 0s; }
-        .color-sweep.s2 { left: 151.68px; background: #ffeb6b; animation-delay: 0.3s; }
-        .color-sweep.s3 { left: 225.84px; background: #ffce6b; animation-delay: 0.6s; }
-        .color-sweep.s4 { left: 300px; background: #ffa16b; animation-delay: 0.9s; }
-        .color-sweep.s5 { left: 374.17px; background: #ff84a6; animation-delay: 1.2s; }
-        .color-sweep.s6 { left: 448.33px; background: #fe523e; animation-delay: 1.5s; }
-        @keyframes sweep {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        .chat-anim-bg img {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .main-title {
-            position: absolute;
-            top: 60px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 2.6rem;
+        
+        /* 标题文本 */
+        .intro-text {
+            font-size: 56px;
             font-weight: 800;
-            color: #fff;
-            z-index: 3;
-            letter-spacing: 0;
-            line-height: 1.1;
-            pointer-events: none;
-            user-select: none;
+            text-align: center;
+            margin-bottom: 50px;
+            line-height: 1.18;
+            background: linear-gradient(90deg, 
+                #ffe066 0%, #63ff8f 20%, #3ecfff 40%, #ff61d2 60%, #ff8c00 80%, #ffe066 100%);
+            background-size: 200% auto;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine-text-pause 1.4s linear infinite;
         }
-        .main-btn-wrap {
-            position: absolute;
-            left: 50%;
-            top: calc(50% + 82.5px);
-            transform: translateX(-50%) translateY(-50%);
-            z-index: 4;
-            max-width: 311px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
+        /* 扫光动画+停顿 */
+        @keyframes shine-text-pause {
+            0% { background-position: 200% 0; }
+            85.7% { background-position: -200% 0; }
+            100% { background-position: -200% 0; }
         }
-        .main-btn {
-            position: relative;
+        
+        /* 按钮样式 */
+        .chat-button {
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-            background: #0f0f0f;
-            border: none;
-            border-radius: 9999px;
-            padding: 12px 32px;
-            cursor: pointer;
-            outline: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
             z-index: 1;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-            transition: box-shadow 0.2s;
+            overflow: visible;
         }
-        .main-btn:before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 9999px;
-            border: 2px solid #a14af8;
-            pointer-events: none;
-            z-index: 2;
-            transition: border-color 0.2s;
+        .chat-button:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
         }
-        .main-btn:active {
-            box-shadow: 0 0 0 2px #a14af8;
-        }
-        .main-btn .emoji {
-            margin-right: 8px;
-            font-size: 1.1em;
-        }
-        /* Chat space */
+        
+        /* ChatGPT风格对话区 */
         #chat-space {
-            display: none;
+            display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            background: #181c27;
-            border-radius: 32px;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.18);
-            max-width: 480px;
-            width: 96vw;
-            min-height: 70vh;
+            justify-content: flex-end;
+            background: #000;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 800px;
+            width: 100%;
+            height: 400px;
+            padding: 50px;
             margin: 0 auto;
-            padding: 0 0 24px 0;
             position: relative;
+            opacity: 0;
         }
-        #chat-messages {
+        /* 过渡动画 */
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
+            pointer-events: none;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
+        }
+        #main-card, #chat-space {
+            opacity: 1;
+        }
+        .chat-messages {
             flex: 1;
             width: 100%;
-            padding: 2.2rem 1.2rem 1.2rem 1.2rem;
+            padding: 0 0 24px 0;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-        }
-        .bubble {
-            max-width: 80%;
-            padding: 0.9rem 1.3rem;
-            border-radius: 1.5rem;
-            font-size: 1.08rem;
-            line-height: 1.7;
-            word-break: break-word;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            position: relative;
-        }
-        .bubble.user {
-            align-self: flex-end;
-            background: linear-gradient(90deg, #4f8cff 60%, #357ae8 100%);
-            color: #fff;
-            border-bottom-right-radius: 0.3rem;
-        }
-        .bubble.ai {
-            align-self: flex-start;
-            background: #23283a;
+            gap: 0.7rem;
+            box-sizing: border-box;
             color: #e3e6ee;
-            border-bottom-left-radius: 0.3rem;
-            border: 1px solid #353b4d;
+            font-size: 1.08rem;
+            font-family: inherit;
         }
-        #chat-form {
+        .chat-form {
             display: flex;
             width: 100%;
-            padding: 0.7rem 1.2rem 0 1.2rem;
+            padding: 0;
             background: none;
             border: none;
             margin-top: auto;
+            box-sizing: border-box;
+            align-items: flex-end;
         }
-        #chat-input {
+        .chat-input {
             flex: 1;
-            padding: 0.7rem 1rem;
-            border-radius: 1.5rem;
-            border: 1px solid #353b4d;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 2px solid rgba(255,255,255,0.18);
+            border-radius: 0;
+            background: transparent;
+            color: #e3e6ee;
             font-size: 1rem;
             outline: none;
-            background: #23283a;
-            color: #e3e6ee;
-            margin-right: 0.7rem;
+            margin-right: 12px;
+            box-shadow: none;
+            transition: border-color 0.2s;
         }
-        #send-btn {
-            background: #4f8cff;
-            color: #fff;
+        .chat-input:focus {
+            border-bottom: 2px solid #fff;
+        }
+        .send-btn {
+            background: #fff;
+            color: #23272f;
             border: none;
-            border-radius: 1.5rem;
-            padding: 0.7rem 1.5rem;
-            font-size: 1rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            padding: 0;
         }
-        #send-btn:hover {
-            background: #357ae8;
+        .send-btn:hover {
+            background: #f0f0f0;
+            color: #2979ff;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
         }
-        @media (max-width: 700px) {
-            .main-card { width: 98vw; height: 340px; border-radius: 18px; }
-            .main-title { font-size: 1.3rem; top: 32px; }
-            .main-btn-wrap { top: calc(50% + 60px); }
-            .chat-anim-bg, .chat-anim-mask { left: 50%; width: 90vw; min-width: 220px; max-width: 98vw; }
-            #chat-space { border-radius: 16px; padding-bottom: 12px; }
+        .typewriter-cursor {
+            display: inline-block;
+            width: 1ch;
+            color: #fff;
+            animation: blink-cursor 0.8s steps(1) infinite;
+            font-weight: bold;
+        }
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .typewriter-text {
+            opacity: 0;
+            animation: fadein 0.5s forwards;
+            color: #fff !important;
+        }
+        @keyframes fadein {
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <div class="main-card" id="main-card">
-        <div class="main-title">
-            "Hi there , let me<br>
-            show you what Wegic<br>
-            can do."
-        </div>
-        <div class="chat-anim-bg">
-            <img src="http://localhost:3845/assets/990b9db0d35a431112bf9bf60a0c168ecf3341ba.svg" alt="chat-bg" />
-        </div>
-        <div class="chat-anim-mask">
-            <div class="color-sweep s1"></div>
-            <div class="color-sweep s2"></div>
-            <div class="color-sweep s3"></div>
-            <div class="color-sweep s4"></div>
-            <div class="color-sweep s5"></div>
-            <div class="color-sweep s6"></div>
-        </div>
-        <div class="main-btn-wrap">
-            <button class="main-btn" id="start-btn">
-                <span class="emoji">💙</span> Let's chat
-            </button>
-        </div>
+    <div class="card" id="main-card">
+        <h1 class="intro-text">
+            “Hi there!<br>What would you like to talk about today?”
+        </h1>
+        <button class="chat-button" id="start-btn">
+            <span class="heart-icon">💙</span>
+            Let's chat
+        </button>
     </div>
-
-    <div id="chat-space">
-        <div id="chat-messages"></div>
-        <form id="chat-form" autocomplete="off">
-            <input id="chat-input" type="text" placeholder="Type your message..." autocomplete="off" required />
-            <button id="send-btn" type="submit">Send</button>
+    <div id="chat-space" style="display:none;">
+        <div class="chat-messages" id="chat-messages"></div>
+        <form class="chat-form" id="chat-form" autocomplete="off">
+            <input class="chat-input" id="chat-input" type="text" placeholder="输入你的问题..." autocomplete="off" required />
+            <button class="send-btn" id="send-btn" type="submit" aria-label="发送">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <path d="M11 17V5M11 5L6 10M11 5l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
         </form>
     </div>
-
     <script>
-        // 首页按钮切换到 chat
-        const startBtn = document.getElementById('start-btn');
-        const mainCard = document.getElementById('main-card');
-        const chatSpace = document.getElementById('chat-space');
-        const chatMessages = document.getElementById('chat-messages');
-        const chatForm = document.getElementById('chat-form');
-        const chatInput = document.getElementById('chat-input');
-        chatSpace.style.display = 'none';
-        if (startBtn) {
-            startBtn.addEventListener('click', () => {
+    // 按钮点击切换到对话页面
+    const startBtn = document.getElementById('start-btn');
+    const mainCard = document.getElementById('main-card');
+    const chatSpace = document.getElementById('chat-space');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    if (startBtn && mainCard && chatSpace) {
+        startBtn.addEventListener('click', () => {
+            mainCard.classList.add('fade-out');
+            setTimeout(() => {
                 mainCard.style.display = 'none';
                 chatSpace.style.display = 'flex';
+                setTimeout(() => {
+                    chatSpace.classList.add('fade-in');
+                    chatSpace.style.opacity = 1;
+                    // 更长更美的自动提问
+                    typeQuestion('Hi，很高兴见到你！今天你想聊些什么？你可以和我分享你的想法、问题或任何有趣的故事～');
+                }, 10);
                 chatInput.focus();
-            });
-        }
-        function appendMessage(text, sender) {
-            const div = document.createElement('div');
-            div.className = 'bubble ' + sender;
-            div.innerText = text;
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        function mockAIReply(userText) {
-            if (/hello|hi|你好/i.test(userText)) {
-                return 'Hello! How can I help you today?';
-            } else if (/who|你是谁/i.test(userText)) {
-                return 'I am Wegic, your AI assistant.';
-            } else if (/bye|再见/i.test(userText)) {
-                return 'Goodbye! Have a nice day!';
+            }, 500);
+        });
+    }
+    // 纯文本打字机效果
+    function appendMessage(text, sender) {
+        const div = document.createElement('div');
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.textAlign = sender === 'user' ? 'right' : 'left';
+        chatMessages.appendChild(div);
+        let i = 0;
+        let cursor;
+        function type() {
+            if (i <= text.length) {
+                div.innerHTML = `<span class="typewriter-text">${text.slice(0, i)}</span><span class="typewriter-cursor">|</span>`;
+                i++;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                setTimeout(type, 28);
             } else {
-                const replies = [
-                    'Interesting question! Let me think...',
-                    'I am still learning. Could you rephrase?',
-                    'That sounds great!',
-                    'Hmm, I see.',
-                    'Can you tell me more?'
-                ];
-                return replies[Math.floor(Math.random() * replies.length)];
+                div.innerHTML = `<span class="typewriter-text">${text}</span>`;
             }
         }
-        if (chatForm) {
-            chatForm.addEventListener('submit', e => {
-                e.preventDefault();
-                const userText = chatInput.value.trim();
-                if (!userText) return;
-                appendMessage(userText, 'user');
-                chatInput.value = '';
-                setTimeout(() => {
-                    appendMessage(mockAIReply(userText), 'ai');
-                }, 600 + Math.random() * 400);
-            });
+        type();
+    }
+    function typeQuestion(text) {
+        appendMessage(text, 'ai');
+    }
+    function mockAIReply(userText) {
+        if (/hello|hi|你好/i.test(userText)) {
+            return 'Hello! How can I help you today?';
+        } else if (/who|你是谁/i.test(userText)) {
+            return 'I am Wegic, your AI assistant.';
+        } else if (/bye|再见/i.test(userText)) {
+            return 'Goodbye! Have a nice day!';
+        } else {
+            const replies = [
+                'Interesting question! Let me think...',
+                'I am still learning. Could you rephrase?',
+                'That sounds great!',
+                'Hmm, I see.',
+                'Can you tell me more?'
+            ];
+            return replies[Math.floor(Math.random() * replies.length)];
         }
+    }
+    if (chatForm) {
+        chatForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const userText = chatInput.value.trim();
+            if (!userText) return;
+            appendMessage(userText, 'user');
+            chatInput.value = '';
+            setTimeout(() => {
+                appendMessage(mockAIReply(userText), 'ai');
+            }, 600 + Math.random() * 400);
+        });
+    }
     </script>
 </body>
 </html>
