@@ -153,27 +153,31 @@
         
         /* 按钮样式 */
         .chat-button {
+            display: flex;
+            max-width: 310.936px;
+            padding: 12px 24px;
+            align-items: flex-start;
+            gap: 8px;
             background: rgba(30, 30, 34, 0.92);
             color: #fff;
             border: none;
             border-radius: 18px;
-            padding: 10px 28px;
             font-size: 1rem;
             font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
             font-weight: 400;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            transition: background 0.18s, box-shadow 0.18s, color 0.18s;
             position: relative;
             z-index: 1;
             overflow: visible;
             box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            transition: background 0.13s, box-shadow 0.13s, color 0.13s, transform 0.13s cubic-bezier(.4,0,.2,1);
+            align-self: flex-start;
         }
         .chat-button:hover {
             background: rgba(18, 18, 22, 0.98);
             color: #fff;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+            transform: translateY(-1.5px) scale(1.012);
         }
         
         /* ChatGPT风格对话区 */
@@ -185,6 +189,9 @@
             padding: 0 32px 24px 32px;
             box-sizing: border-box;
             background: transparent;
+        }
+        #chat-space {
+            background: #fff !important;
         }
         /* 过渡动画 */
         .fade-out {
@@ -213,6 +220,9 @@
             opacity: 1;
         }
         .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
             flex: 1;
             width: 100%;
             overflow-y: auto;
@@ -221,6 +231,11 @@
             font-family: 'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             color: #4B4B57;
             font-weight: 500;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE 10+ */
+        }
+        .chat-messages::-webkit-scrollbar {
+            display: none; /* Chrome/Safari/Webkit */
         }
         .chat-form {
             display: flex;
@@ -236,6 +251,7 @@
             padding: 0;
             gap: 0;
         }
+        /* 恢复输入框原生UI，去除自定义边框、阴影、背景，仅保留圆角和内边距 */
         .input-wrapper {
             display: flex;
             align-items: center;
@@ -249,8 +265,19 @@
             transition: box-shadow 0.22s cubic-bezier(.4,0,.2,1);
         }
         .input-wrapper:focus-within {
-            box-shadow: 0 0 0 6px rgba(120,110,255,0.10), 0 2px 12px 0 rgba(120,110,255,0.08), 0 1px 4px 0 rgba(30,34,44,0.04);
+            box-shadow: 0 0 0 6px rgba(0,0,0,0.04), 0 2px 12px 0 rgba(0,0,0,0.04), 0 1px 4px 0 rgba(0,0,0,0.04);
             filter: blur(0.2px);
+        }
+        #chat-input, .chat-input {
+            border: none !important;
+            outline: none;
+            background: transparent;
+            font-size: 1.08rem;
+            color: rgba(0,0,0,0.8);
+            padding: 0.7rem 1rem;
+            box-shadow: none !important;
+            margin-right: 0.7rem;
+            padding-left: 0 !important;
         }
         .input-icon {
             display: flex;
@@ -362,6 +389,35 @@
         }
         .send-btn:hover svg {
             color: #2979ff;
+        }
+        .user-bubble {
+            background: rgba(0,0,0,0.04);
+            border-radius: 1.3em;
+            padding: 16px;
+            margin: 8px 0;
+            display: block;
+            max-width: 80%;
+            word-break: break-word;
+            font-size: 1.08rem;
+            color: #23272f;
+            font-family: 'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 500;
+            align-self: flex-end;
+        }
+        .user-bubble .typewriter-text {
+            font-size: 1.08rem !important;
+            font-weight: 500;
+            color: #23272f !important;
+            font-family: 'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        .send-btn:disabled {
+            background: #e0e0e0 !important;
+            color: #bdbdbd !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+        }
+        .send-btn:disabled svg {
+            color: #bdbdbd !important;
         }
     body {
         background: #fff;
@@ -508,6 +564,83 @@
     .chat-button {
         margin-top: 0;
         align-self: center;
+        border-radius: 12px;
+    }
+    /* 输入框内字体颜色 */
+    #chat-input {
+      color: rgba(0,0,0,0.8) !important;
+    }
+    #chat-input::placeholder {
+      color: rgba(0,0,0,0.3) !important;
+      opacity: 1;
+    }
+    /* loading动画和Thinking样式 */
+    .ai-loading {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      margin: 0.7rem 0 0.7rem 0.2rem;
+      font-size: 1.08rem;
+      font-weight: 500;
+    }
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 1.2px dashed #bbb;
+      border-radius: 50%;
+      background: none;
+      animation: spin 1.6s linear infinite;
+      display: inline-block;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    .loading-text {
+      color: rgba(0,0,0,0.4);
+      background: linear-gradient(
+        90deg,
+        rgba(0,0,0,0.4) 0%,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,0.7) 46%,
+        #fff 50%,
+        rgba(255,255,255,0.7) 54%,
+        rgba(255,255,255,0) 60%,
+        rgba(0,0,0,0.4) 100%
+      );
+      background-size: 220% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: sweep-white-mask 3.8s cubic-bezier(.45,0,.2,1) infinite;
+      font-weight: 500;
+      font-size: 1.08rem;
+      letter-spacing: 0.01em;
+      transition: color 0.3s;
+    }
+    @keyframes sweep-white-mask {
+      0%   { background-position: 120% 0; }
+      100% { background-position: -120% 0; }
+    }
+    /* 问题进度条样式 */
+    .question-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #f3f3f3;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      position: absolute;
+      left: 0; top: 0;
+      z-index: 10;
+    }
+    .question-progress-bar__fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 4px;
+      background: linear-gradient(270deg, rgba(243, 87, 168, 0.15) 0%, rgba(255, 140, 59, 0.30) 15%, rgba(255, 224, 102, 0.45) 30%, rgba(255, 224, 102, 0.55) 42.88%, rgba(255, 140, 59, 0.70) 55%, rgba(243, 87, 168, 0.85) 70%, rgba(123, 47, 242, 0.92) 85%, rgba(90, 38, 117, 0.95) 100%);
+      transition: width 0.5s cubic-bezier(.4,0,.2,1);
     }
     </style>
 </head>
@@ -526,6 +659,7 @@
                 </button>
             </div>
             <div id="chat-space" style="display:none;">
+                <div class="question-progress-bar"><div class="question-progress-bar__fill" id="question-progress-bar-fill"></div></div>
                 <div class="chat-messages" id="chat-messages"></div>
                 <form class="chat-form input-animate" id="chat-form" autocomplete="off">
                     <div class="input-wrapper">
@@ -585,52 +719,79 @@
                     }
                     // 延迟100ms再显示欢迎语，确保动画自然
                     setTimeout(() => {
-                        typeQuestion('Hi, nice to meet you! What would you like to chat about today? You can share your thoughts, questions, or any interesting stories with me!');
+                        // 这里skipLoading: true，首句不显示loading
+                        typeQuestion('Hi, nice to meet you! What would you like to chat about today? You can share your thoughts, questions, or any interesting stories with me!', true);
                         chatInput.focus();
+                        // 进入对话流时进度条归零
+                        setQuestionProgress(0);
                     }, 100);
-                }, 10);
+                }, 900); // 由2600改为900
             }, 350);
         });
     }
     // 确保chatMessages变量已定义
     const chatMessages = document.getElementById('chat-messages');
     // 纯文本打字机效果
-    function appendMessage(text, sender) {
+    function appendMessage(text, sender, options = {}) {
         const div = document.createElement('div');
         div.style.whiteSpace = 'pre-wrap';
-        div.style.textAlign = sender === 'user' ? 'right' : 'left';
+        // 不再设置textAlign，交给CSS
         div.style.margin = '8px 0';
         div.style.color = '#4B4B57';
         div.style.fontFamily = "'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
         div.style.fontWeight = 500;
+        if(sender === 'user') {
+            div.className = 'user-bubble';
+            div.style.background = 'rgba(0,0,0,0.04)';
+            div.style.padding = '16px';
+            div.style.borderRadius = '1.3em';
+            div.style.display = 'block';
+            div.style.maxWidth = '80%';
+            div.style.margin = '8px 0';
+            div.style.alignSelf = 'flex-end';
+        }
         chatMessages.appendChild(div);
         let i = 0;
-        if (sender === 'ai') {
-            // 先闪烁两下光标
-            div.innerHTML = `<span class="typewriter-text"></span><span class="typewriter-cursor">&nbsp;</span>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            setTimeout(() => {
-                setTimeout(() => {
-                    // 开始打字机动画
-                    type();
-                }, 500); // 第二次闪烁后再打字
-            }, 500); // 第一次闪烁
-        } else {
-            type();
-        }
         function type() {
             if (i <= text.length) {
-                div.innerHTML = `<span class="typewriter-text">${text.slice(0, i)}</span><span class="typewriter-cursor">&nbsp;</span>`;
+                div.innerHTML = `<span class=\"typewriter-text\">${text.slice(0, i)}</span><span class=\"typewriter-cursor\">&nbsp;</span>`;
                 i++;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 setTimeout(type, 10);
             } else {
-                div.innerHTML = `<span class="typewriter-text">${text}</span>`;
+                div.innerHTML = `<span class=\"typewriter-text\">${text}</span>`;
             }
         }
+        if (sender === 'ai') {
+            if (!options.skipLoading) {
+                showAILoading();
+                setTimeout(() => {
+                    removeAILoading();
+                    // 先闪烁两下光标
+                    div.innerHTML = `<span class=\"typewriter-text\"></span><span class=\"typewriter-cursor\">&nbsp;</span>`;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    setTimeout(() => {
+                        setTimeout(() => {
+                            type();
+                        }, 500);
+                    }, 500);
+                }, 2000);
+            } else {
+                // 不显示loading，直接闪烁两下光标再打字
+                div.innerHTML = `<span class=\"typewriter-text\"></span><span class=\"typewriter-cursor\">&nbsp;</span>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                setTimeout(() => {
+                    setTimeout(() => {
+                        type();
+                    }, 500);
+                }, 500);
+            }
+        } else {
+            type();
+        }
     }
-    function typeQuestion(text) {
-        appendMessage(text, 'ai');
+    function typeQuestion(text, skipLoading) {
+        appendMessage(text, 'ai', { skipLoading });
     }
     function mockAIReply(userText) {
         if (/hello|hi|你好/i.test(userText)) {
@@ -659,12 +820,56 @@
             if (!userText) return;
             appendMessage(userText, 'user');
             chatInput.value = '';
+            // 每次提交后推进进度条
+            setQuestionProgress(currentQuestion + 1);
             setTimeout(() => {
                 appendMessage(mockAIReply(userText), 'ai');
             }, 600 + Math.random() * 400);
         });
     }
+    // loading相关函数
+    function showAILoading() {
+        removeAILoading();
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'ai-loading';
+        loadingDiv.innerHTML = '<span class="loading-spinner"></span><span class="loading-text">Thinking...</span>';
+        chatMessages.appendChild(loadingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    function removeAILoading() {
+        const loading = chatMessages.querySelector('.ai-loading');
+        if (loading) loading.remove();
+    }
     // 只用CSS动画，不用JS切换类，渐变自然过渡到黑色
+    // 发送按钮置灰逻辑
+    const sendBtn = document.getElementById('send-btn');
+    if (chatInput && sendBtn) {
+      function toggleSendBtn() {
+        if (chatInput.value.trim() === '') {
+          sendBtn.disabled = true;
+        } else {
+          sendBtn.disabled = false;
+        }
+      }
+      chatInput.addEventListener('input', toggleSendBtn);
+      // 初始化时也判断一次
+      toggleSendBtn();
+    }
+    // 问题进度条逻辑
+    const totalQuestions = 4;
+    let currentQuestion = 0;
+    const progressBarFill = document.getElementById('question-progress-bar-fill');
+    function setQuestionProgress(idx) {
+      currentQuestion = idx;
+      if(progressBarFill) {
+        progressBarFill.style.width = (currentQuestion / totalQuestions * 100) + '%';
+      }
+    }
+    // 示例：每次回答完问题后调用 setQuestionProgress(已答题数)
+    // setQuestionProgress(1); // 1/4
+    // setQuestionProgress(2); // 2/4
+    // setQuestionProgress(3); // 3/4
+    // setQuestionProgress(4); // 4/4
     </script>
 </body>
 </html>
