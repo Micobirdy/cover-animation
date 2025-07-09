@@ -242,7 +242,7 @@
             align-items: flex-end;
             width: 100%;
         }
-        /* Dia风格输入框 */
+        /* 原生风格输入框 */
         .chat-form {
             display: flex;
             align-items: center;
@@ -584,8 +584,8 @@
       font-weight: 500;
     }
     .loading-spinner {
-      width: 16px;
-      height: 16px;
+      width: 12px;
+      height: 12px;
       border: 1.2px dashed #bbb;
       border-radius: 50%;
       background: none;
@@ -642,6 +642,258 @@
       background: linear-gradient(270deg, rgba(243, 87, 168, 0.15) 0%, rgba(255, 140, 59, 0.30) 15%, rgba(255, 224, 102, 0.45) 30%, rgba(255, 224, 102, 0.55) 42.88%, rgba(255, 140, 59, 0.70) 55%, rgba(243, 87, 168, 0.85) 70%, rgba(123, 47, 242, 0.92) 85%, rgba(90, 38, 117, 0.95) 100%);
       transition: width 0.5s cubic-bezier(.4,0,.2,1);
     }
+    .select-question {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .select-options {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+    }
+    .select-option {
+      display: flex;
+      padding: 12px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      border-radius: var(--Max, 9999px);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.08);
+      font-size: 16px;
+      color: #23272f;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.18s, box-shadow 0.18s, border-color 0.18s;
+    }
+    .select-option:hover {
+      background: rgba(0,0,0,0.06);
+      /* 去掉描边和阴影 */
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: none;
+    }
+    .select-question > div:first-child {
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 500;
+      color: #23272f;
+      margin-bottom: 0;
+    }
+    .chat-message, .ai-message, .user-message {
+      font-size: 16px;
+    }
+    .thinking-text {
+      font-size: 13px;
+      color: rgba(0,0,0,0.4);
+      background: linear-gradient(
+        90deg,
+        rgba(0,0,0,0.4) 0%,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,0.7) 46%,
+        #fff 50%,
+        rgba(255,255,255,0.7) 54%,
+        rgba(255,255,255,0) 60%,
+        rgba(0,0,0,0.4) 100%
+      );
+      background-size: 220% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: sweep-white-mask 3.8s cubic-bezier(.45,0,.2,1) infinite;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: color 0.3s;
+    }
+    .select-question-title {
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 500;
+      color: #23272f;
+      margin-bottom: 0;
+    }
+    /* 对话流所有文本统一字距 */
+    .chat-messages, .select-option, .select-question-title, .thinking-text, .ai-message, .user-message, .chat-message, .typewriter-text {
+      letter-spacing: 0.5%;
+    }
+    /* 渐入动画 */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .select-options {
+      opacity: 1;
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+    }
+    .select-option {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeInUp 0.44s cubic-bezier(.4,0,.2,1) forwards;
+      font-size: 13px;
+    }
+    .select-option:hover {
+      background: rgba(0,0,0,0.06);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: none;
+    }
+    @keyframes fadeInOpacity {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .select-option {
+      opacity: 0;
+      animation: fadeInOpacity 0.38s cubic-bezier(.4,0,.2,1) forwards;
+      font-size: 14px;
+      transform: none;
+    }
+    .select-option:hover {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: none;
+    }
+    @keyframes fadeOutDown {
+      0% { opacity: 1; transform: none; }
+      100% { opacity: 0; transform: translateY(24px); }
+    }
+    .fade-out-down {
+      animation: fadeOutDown 0.38s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    /* 👋 招手 emoji 动画 */
+    .wave-hand {
+      display: inline-block;
+      font-size: 1.1em;
+      animation: wave 1.6s infinite;
+      transform-origin: 70% 70%;
+    }
+
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      10% { transform: rotate(14deg); }
+      20% { transform: rotate(-8deg); }
+      30% { transform: rotate(14deg); }
+      40% { transform: rotate(-4deg); }
+      50% { transform: rotate(10deg); }
+      60% { transform: rotate(0deg); }
+      100% { transform: rotate(0deg); }
+    }
+    /* 感谢页面样式 */
+    .thankyou-content {
+      width: 100%;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 48px;
+      box-sizing: border-box;
+      background: none;
+    }
+    .thankyou-title {
+      color: #000;
+      text-align: center;
+      font-family: Inter, Arial, sans-serif;
+      font-size: 30px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 36px;
+      margin-bottom: 18px;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      justify-content: center;
+      transform: translateX(4px);
+    }
+    .thankyou-emoji {
+      font-size: 1.2em;
+      margin-left: 0.1em;
+    }
+    .thankyou-desc {
+      color: #000;
+      text-align: center;
+      font-family: Inter, Arial, sans-serif;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px;
+      opacity: 0.5;
+      margin-bottom: 44px;
+      max-width: 700px;
+    }
+    .thankyou-btns {
+      display: flex;
+      gap: 12px;
+      margin-top: 0;
+      justify-content: center;
+    }
+    .thankyou-btn {
+      display: flex;
+      height: 48px;
+      padding: 0px 20px 2px 20px;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      border-radius: 16px;
+      background: #FFF;
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.06),
+    0px 20px 20px 0px rgba(0, 0, 0, 0.01) inset,
+    0px -2px 1px 1px rgba(0, 0, 0, 0.06) inset,
+    0px 1px 4px 1px rgba(255, 255, 255, 0.20) inset,
+    0px -1px 1px 0px rgba(255, 255, 255, 0.20) inset,
+    0px 1px 0px 0px #FFF inset;
+      font-family: Inter, Arial, sans-serif;
+      font-size: 15px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 24px;
+      color: #000;
+      border: none;
+      transition: box-shadow 0.18s, background 0.18s, color 0.18s, transform 0.18s;
+      cursor: pointer;
+      outline: none;
+    }
+    .thankyou-btn:hover {
+      background: #f3f3f3;
+      color: #18181A;
+      box-shadow: 0 4px 16px 0 rgba(30,34,44,0.08);
+    }
+    #thankyou-page {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      position: absolute;
+      left: 0; top: 0;
+      z-index: 10;
+    }
+    .fade-in {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0);
+      transition: opacity 0.45s cubic-bezier(.4,0,.2,1), transform 0.45s, filter 0.45s;
+    }
+    .fade-out {
+      opacity: 0;
+      transform: scale(0.97) translateY(16px);
+      filter: blur(2px);
+      transition: opacity 0.45s cubic-bezier(.4,0,.2,1), transform 0.45s, filter 0.45s;
+      pointer-events: none;
+    }
     </style>
 </head>
 <body>
@@ -652,7 +904,11 @@
             <div class="card-glow card-glow-bl"></div>
             <div class="card-glow card-glow-br"></div>
             <div id="cover-content" class="cover-center">
-                <h1 class="intro-text">“Hi there,<br>let me show you<br>what Wegic can do.”</h1>
+                <h1 class="intro-text">
+                  <span class="intro-hi">Hi there,</span>
+                  <span style="vertical-align:middle;margin-left:8px;font-size:1.1em;">👋</span>
+                  <br>let me show you<br>what Wegic can do.
+                </h1>
                 <button class="chat-button" id="start-btn">
                     <span class="heart-icon">💙</span>
                     Let's chat
@@ -672,6 +928,7 @@
                     </div>
                 </form>
             </div>
+            <div id="thankyou-page" style="display:none;"></div>
             <div class="card-bottom-glow"></div>
         </div>
         <div class="footer-info">
@@ -701,6 +958,33 @@
     const coverContent = document.getElementById('cover-content');
     const chatSpace = document.getElementById('chat-space');
     const chatInput = document.getElementById('chat-input');
+    // 问题数组，第2题为选项题，其余为文本题
+    const selectOptions = [
+      'Product Inquiry',
+      'Partnership',
+      'Support Request',
+      'Other'
+    ];
+    const questions = [
+      { type: 'text', text: 'Hi, nice to meet you! What would you like to chat about today? You can share your thoughts, questions, or any interesting stories with me!' },
+      { type: 'select', text: 'What brings you here today? Please select an option below.', options: selectOptions },
+      { type: 'text', text: 'Could you please describe your needs or questions in detail?' },
+      { type: 'text', text: 'Thank you for your feedback! We will get back to you as soon as possible.' }
+    ];
+    let userSubmitCount = 0;
+    const totalQuestions = questions.length;
+    // 显示当前问题，支持文本和选择题
+    function showCurrentQuestion(skipLoading = false) {
+      const q = questions[userSubmitCount];
+      if (!q) return;
+      if (q.type === 'select') {
+        typeQuestionWithSelect(q.text, q.options);
+      } else {
+        typeQuestion(q.text, skipLoading);
+      }
+      // setQuestionProgress(userSubmitCount + 1); // 移除
+    }
+    // 首次点击按钮时显示第一个问题
     if (startBtn && coverContent && chatSpace && chatInput) {
         startBtn.addEventListener('click', () => {
             coverContent.classList.add('fade-out');
@@ -719,13 +1003,12 @@
                     }
                     // 延迟100ms再显示欢迎语，确保动画自然
                     setTimeout(() => {
-                        // 这里skipLoading: true，首句不显示loading
-                        typeQuestion('Hi, nice to meet you! What would you like to chat about today? You can share your thoughts, questions, or any interesting stories with me!', true);
+                        userSubmitCount = 0;
+                        showCurrentQuestion(true); // 首句不显示loading
                         chatInput.focus();
-                        // 进入对话流时进度条归零
-                        setQuestionProgress(0);
+                        // setQuestionProgress(1); // 由showCurrentQuestion自动处理
                     }, 100);
-                }, 900); // 由2600改为900
+                }, 900);
             }, 350);
         });
     }
@@ -741,7 +1024,7 @@
         div.style.fontFamily = "'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
         div.style.fontWeight = 500;
         if(sender === 'user') {
-            div.className = 'user-bubble';
+            div.className = 'user-bubble user-message';
             div.style.background = 'rgba(0,0,0,0.04)';
             div.style.padding = '16px';
             div.style.borderRadius = '1.3em';
@@ -749,6 +1032,10 @@
             div.style.maxWidth = '80%';
             div.style.margin = '8px 0';
             div.style.alignSelf = 'flex-end';
+        } else if(sender === 'ai') {
+            div.className = 'ai-message';
+        } else {
+            div.className = 'chat-message';
         }
         chatMessages.appendChild(div);
         let i = 0;
@@ -791,7 +1078,78 @@
         }
     }
     function typeQuestion(text, skipLoading) {
-        appendMessage(text, 'ai', { skipLoading });
+        appendMessageWithProgress(text, 'ai', { skipLoading });
+    }
+    // 新增：带进度条推进的打字机效果
+    function appendMessageWithProgress(text, sender, options = {}) {
+        const div = document.createElement('div');
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.margin = '8px 0';
+        div.style.color = '#4B4B57';
+        div.style.fontFamily = "'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
+        div.style.fontWeight = 500;
+        if(sender === 'user') {
+            div.className = 'user-bubble user-message';
+            div.style.background = 'rgba(0,0,0,0.04)';
+            div.style.padding = '16px';
+            div.style.borderRadius = '1.3em';
+            div.style.display = 'block';
+            div.style.maxWidth = '80%';
+            div.style.margin = '8px 0';
+            div.style.alignSelf = 'flex-end';
+        } else if(sender === 'ai') {
+            div.className = 'ai-message';
+        } else {
+            div.className = 'chat-message';
+        }
+        chatMessages.appendChild(div);
+        let i = 0;
+        let progressAdvanced = false;
+        function type() {
+            if (i <= text.length) {
+                div.innerHTML = `<span class=\"typewriter-text\">${text.slice(0, i)}</span><span class=\"typewriter-cursor\">&nbsp;</span>`;
+                i++;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                // 进度条推进时机：剩下最后2个字符时
+                if (!progressAdvanced && text.length > 2 && i === text.length - 1) {
+                    setQuestionProgress(userSubmitCount + 1);
+                    progressAdvanced = true;
+                }
+                setTimeout(type, 10);
+            } else {
+                div.innerHTML = `<span class=\"typewriter-text\">${text}</span>`;
+                if (!progressAdvanced) {
+                    setQuestionProgress(userSubmitCount + 1);
+                }
+            }
+        }
+        if (sender === 'ai') {
+            if (!options.skipLoading) {
+                showAILoading();
+                setTimeout(() => {
+                    removeAILoading();
+                    // 先闪烁两下光标
+                    div.innerHTML = `<span class=\"typewriter-text\"></span><span class=\"typewriter-cursor\">&nbsp;</span>`;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    setTimeout(() => {
+                        setTimeout(() => {
+                            type();
+                        }, 500);
+                    }, 500);
+                }, 2000);
+            } else {
+                // 不显示loading，直接闪烁两下光标再打字
+                div.innerHTML = `<span class=\"typewriter-text\"></span><span class=\"typewriter-cursor\">&nbsp;</span>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                setTimeout(() => {
+                    setTimeout(() => {
+                        type();
+                    }, 500);
+                }, 500);
+            }
+        } else {
+            type();
+        }
     }
     function mockAIReply(userText) {
         if (/hello|hi|你好/i.test(userText)) {
@@ -811,28 +1169,34 @@
             return replies[Math.floor(Math.random() * replies.length)];
         }
     }
-    // 确保chatForm事件绑定始终有效，防止页面跳转
+    // 表单提交，依次弹出下一个问题
     const chatForm = document.getElementById('chat-form');
     if (chatForm) {
-        chatForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const userText = chatInput.value.trim();
-            if (!userText) return;
-            appendMessage(userText, 'user');
-            chatInput.value = '';
-            // 每次提交后推进进度条
-            setQuestionProgress(currentQuestion + 1);
-            setTimeout(() => {
-                appendMessage(mockAIReply(userText), 'ai');
-            }, 600 + Math.random() * 400);
-        });
+      chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userText = chatInput.value.trim();
+        if (!userText) return;
+        appendMessage(userText, 'user');
+        chatInput.value = '';
+        userSubmitCount++;
+        // setQuestionProgress(userSubmitCount + 1); // 移除
+        if (userSubmitCount < questions.length) {
+          setTimeout(() => {
+            showCurrentQuestion();
+          }, 400);
+        } else {
+          // 所有问题答完，进入感谢页面
+          setTimeout(showThankYouPage, 600);
+        }
+        // 最后一个问题后不再弹出
+      });
     }
     // loading相关函数
     function showAILoading() {
         removeAILoading();
         const loadingDiv = document.createElement('div');
         loadingDiv.className = 'ai-loading';
-        loadingDiv.innerHTML = '<span class="loading-spinner"></span><span class="loading-text">Thinking...</span>';
+        loadingDiv.innerHTML = '<span class="loading-spinner"></span><span class="thinking-text">Thinking...</span>';
         chatMessages.appendChild(loadingDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -856,8 +1220,6 @@
       toggleSendBtn();
     }
     // 问题进度条逻辑
-    const totalQuestions = 4;
-    let currentQuestion = 0;
     const progressBarFill = document.getElementById('question-progress-bar-fill');
     function setQuestionProgress(idx) {
       currentQuestion = idx;
@@ -865,11 +1227,137 @@
         progressBarFill.style.width = (currentQuestion / totalQuestions * 100) + '%';
       }
     }
+    // 选项题动画和UI还原
+    function typeQuestionWithSelect(questionText, optionsArr) {
+      showAILoading();
+      setTimeout(() => {
+        removeAILoading();
+        // 问题和选项容器
+        const wrap = document.createElement('div');
+        wrap.className = 'select-question';
+        wrap.style.display = 'flex';
+        wrap.style.flexDirection = 'column';
+        wrap.style.gap = '16px';
+        wrap.style.margin = '16px 0 0 0';
+        // 问题部分
+        const qDiv = document.createElement('div');
+        qDiv.className = 'ai-message select-question-title';
+        qDiv.style.fontSize = '16px';
+        qDiv.style.fontWeight = '500';
+        qDiv.style.color = '#23272f';
+        qDiv.style.letterSpacing = '0.5%';
+        qDiv.innerHTML = '';
+        wrap.appendChild(qDiv);
+        chatMessages.appendChild(wrap);
+        let i = 0;
+        let progressAdvanced = false;
+        function type() {
+          if (i <= questionText.length) {
+            qDiv.innerHTML = `<span class=\"typewriter-text\">${questionText.slice(0, i)}</span><span class=\"typewriter-cursor\">&nbsp;</span>`;
+            i++;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            // 进度条推进时机：剩下最后2个字符时
+            if (!progressAdvanced && questionText.length > 2 && i === questionText.length - 1) {
+              setQuestionProgress(userSubmitCount + 1);
+              progressAdvanced = true;
+            }
+            setTimeout(type, 16);
+          } else {
+            qDiv.innerHTML = `<span class=\"typewriter-text\">${questionText}</span>`;
+            if (!progressAdvanced) {
+              setQuestionProgress(userSubmitCount + 1);
+            }
+            // 打字机动画结束后显示选项
+            showSelectOptionsIn(wrap, optionsArr);
+          }
+        }
+        type();
+      }, 2600);
+    }
+    function showSelectOptionsIn(parent, optionsArr) {
+      const div = document.createElement('div');
+      div.className = 'select-options';
+      div.innerHTML = optionsArr.map(opt => `<button class=\"select-option\">${opt}</button>`).join('');
+      parent.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      // 增加底部空间
+      chatMessages.style.paddingBottom = '52px';
+      // 渐入动画（错峰）
+      const btns = div.querySelectorAll('.select-option');
+      btns.forEach((btn, idx) => {
+        setTimeout(() => {
+          btn.style.opacity = '1';
+        }, 60 * idx);
+      });
+      btns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          appendMessage(this.textContent, 'user');
+          userSubmitCount++;
+          setQuestionProgress(userSubmitCount);
+          if (userSubmitCount < questions.length) {
+            showCurrentQuestion();
+          } else {
+            setTimeout(showThankYouPage, 600);
+          }
+        });
+      });
+    }
     // 示例：每次回答完问题后调用 setQuestionProgress(已答题数)
     // setQuestionProgress(1); // 1/4
     // setQuestionProgress(2); // 2/4
     // setQuestionProgress(3); // 3/4
     // setQuestionProgress(4); // 4/4
+    // 感谢页面HTML模板
+    const thankYouHTML = `
+      <div class="thankyou-content">
+        <div class="thankyou-title">Thanks <span class="thankyou-emoji">🎉</span></div>
+        <div class="thankyou-desc">
+          Thank you for your trust and leaving your contact information!<br>
+          I hope to work with you for pet charity, become a partner, and bring more warmth to pets.
+        </div>
+        <div class="thankyou-btns">
+          <button class="thankyou-btn" id="restart-btn">Restart</button>
+          <button class="thankyou-btn" id="feedback-btn">Feedback</button>
+        </div>
+      </div>
+    `;
+    // 感谢页面显示逻辑+动画
+    function showThankYouPage() {
+      const chatSpace = document.getElementById('chat-space');
+      const thankPage = document.getElementById('thankyou-page');
+      if (!thankPage || !chatSpace) return;
+      // 优雅过渡动画：对话区淡出，感谢页淡入
+      chatSpace.classList.add('fade-out');
+      setTimeout(() => {
+        chatSpace.style.display = 'none';
+        thankPage.innerHTML = thankYouHTML;
+        thankPage.style.display = 'flex';
+        thankPage.classList.add('fade-in');
+        // 绑定按钮事件
+        const restartBtn = document.getElementById('restart-btn');
+        if (restartBtn) {
+          restartBtn.onclick = function() {
+            thankPage.classList.remove('fade-in');
+            thankPage.classList.add('fade-out');
+            setTimeout(() => {
+              thankPage.style.display = 'none';
+              chatMessages.innerHTML = '';
+              userSubmitCount = 0;
+              showCurrentQuestion(true);
+              chatSpace.style.display = 'flex';
+              chatSpace.classList.remove('fade-out');
+              chatSpace.classList.add('fade-in');
+            }, 400);
+          };
+        }
+        const feedbackBtn = document.getElementById('feedback-btn');
+        if (feedbackBtn) {
+          feedbackBtn.onclick = function() {
+            alert('Feedback clicked!');
+          };
+        }
+      }, 400);
+    }
     </script>
 </body>
 </html>
