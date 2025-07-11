@@ -74,7 +74,7 @@
             mix-blend-mode: lighten;
         }
         
-        /* 标题文本 */
+        /* 标题文本（扫光动画） */
         .intro-text {
             font-size: 3.2rem;
             font-weight: 400;
@@ -111,15 +111,11 @@
         }
         .intro-text.no-gradient {
             background: none !important;
+            background-clip: initial;
             -webkit-background-clip: initial;
             -webkit-text-fill-color: #111 !important;
             color: #111 !important;
             animation: none !important;
-        }
-        /* 无限循环扫光+停顿动画 */
-        .intro-text {
-            animation: dia-gradient-loop 3.2s cubic-bezier(.4,0,.2,1) infinite;
-            animation-fill-mode: forwards;
         }
         @keyframes dia-gradient-loop {
             0% {
@@ -227,12 +223,15 @@
             width: 100%;
             overflow-y: auto;
             margin-bottom: 16px;
-            padding-top: 30px;
+            padding-top: 56px;
             font-family: 'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             color: #4B4B57;
             font-weight: 500;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none; /* IE 10+ */
+            height: 220px; /* 新增：固定高度，按需调整 */
+            justify-content: flex-start;
+            align-items: stretch;
         }
         .chat-messages::-webkit-scrollbar {
             display: none; /* Chrome/Safari/Webkit */
@@ -579,7 +578,7 @@
       display: flex;
       align-items: center;
       gap: 0.5em;
-      margin: 0.7rem 0 0.7rem 0.2rem;
+      margin: 0;
       font-size: 1.08rem;
       font-weight: 500;
     }
@@ -609,7 +608,7 @@
         rgba(255,255,255,0) 60%,
         rgba(0,0,0,0.4) 100%
       );
-      background-size: 220% auto;
+      background-size: 200% auto;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -619,9 +618,31 @@
       letter-spacing: 0.01em;
       transition: color 0.3s;
     }
+    .thinking-text {
+      font-size: 13px;
+      color: rgba(0,0,0,0.4);
+      background: linear-gradient(
+        90deg,
+        rgba(0,0,0,0.4) 0%,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,0.7) 46%,
+        #fff 50%,
+        rgba(255,255,255,0.7) 54%,
+        rgba(255,255,255,0) 60%,
+        rgba(0,0,0,0.4) 100%
+      );
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: sweep-white-mask 3.8s cubic-bezier(.45,0,.2,1) infinite;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: color 0.3s;
+    }
     @keyframes sweep-white-mask {
-      0%   { background-position: 120% 0; }
-      100% { background-position: -120% 0; }
+      0%   { background-position: 100% 0; }
+      100% { background-position: 0% 0; }
     }
     /* 问题进度条样式 */
     .question-progress-bar {
@@ -686,28 +707,6 @@
     .chat-message, .ai-message, .user-message {
       font-size: 16px;
     }
-    .thinking-text {
-      font-size: 13px;
-      color: rgba(0,0,0,0.4);
-      background: linear-gradient(
-        90deg,
-        rgba(0,0,0,0.4) 0%,
-        rgba(255,255,255,0) 40%,
-        rgba(255,255,255,0.7) 46%,
-        #fff 50%,
-        rgba(255,255,255,0.7) 54%,
-        rgba(255,255,255,0) 60%,
-        rgba(0,0,0,0.4) 100%
-      );
-      background-size: 220% auto;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: sweep-white-mask 3.8s cubic-bezier(.45,0,.2,1) infinite;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-      transition: color 0.3s;
-    }
     .select-question-title {
       font-size: 16px;
       font-family: inherit;
@@ -729,6 +728,13 @@
         opacity: 1;
         transform: translateY(0);
       }
+    }
+    /* 消失淡出上移动画 */
+    .fade-out-up {
+      opacity: 0;
+      transform: translateY(-32px);
+      filter: blur(2px);
+      transition: opacity 0.4s cubic-bezier(.4,0,.2,1), transform 0.4s, filter 0.4s;
     }
     .select-options {
       opacity: 1;
@@ -860,14 +866,27 @@
       line-height: 24px;
       color: #000;
       border: none;
-      transition: box-shadow 0.18s, background 0.18s, color 0.18s, transform 0.18s;
+      transition: box-shadow 0.18s, background 0.18s, color 0.18s, transform 0.13s;
       cursor: pointer;
       outline: none;
     }
     .thankyou-btn:hover {
-      background: #f3f3f3;
+      border-radius: 8px;
+      background: #FFF;
+      box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.20),
+        0px 1px 0px 0px #FFF inset,
+        0px -1px 1px 0px rgba(255, 255, 255, 0.20) inset,
+        0px 1px 4px 1px rgba(255, 255, 255, 0.20) inset,
+        0px 20px 20px 0px rgba(0, 0, 0, 0.02) inset;
       color: #18181A;
-      box-shadow: 0 4px 16px 0 rgba(30,34,44,0.08);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .thankyou-btn:active {
+      background: #ececec;
+      color: #18181A;
+      box-shadow: 0 1px 2px 0 rgba(30,34,44,0.04);
+      transform: translateY(2px) scale(0.98);
     }
     #thankyou-page {
       width: 100%;
@@ -893,6 +912,12 @@
       filter: blur(2px);
       transition: opacity 0.45s cubic-bezier(.4,0,.2,1), transform 0.45s, filter 0.45s;
       pointer-events: none;
+    }
+    .fade-in-up {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+      transition: opacity 0.6s cubic-bezier(.4,0,.2,1), transform 0.6s, filter 0.6s;
     }
     </style>
 </head>
@@ -975,6 +1000,8 @@
     const totalQuestions = questions.length;
     // 显示当前问题，支持文本和选择题
     function showCurrentQuestion(skipLoading = false) {
+      // 只显示当前问题，清空历史内容
+      chatMessages.innerHTML = '';
       const q = questions[userSubmitCount];
       if (!q) return;
       if (q.type === 'select') {
@@ -982,7 +1009,6 @@
       } else {
         typeQuestion(q.text, skipLoading);
       }
-      // setQuestionProgress(userSubmitCount + 1); // 移除
     }
     // 首次点击按钮时显示第一个问题
     if (startBtn && coverContent && chatSpace && chatInput) {
@@ -1016,6 +1042,8 @@
     const chatMessages = document.getElementById('chat-messages');
     // 纯文本打字机效果
     function appendMessage(text, sender, options = {}) {
+        // 只显示当前用户回答
+        chatMessages.innerHTML = '';
         const div = document.createElement('div');
         div.style.whiteSpace = 'pre-wrap';
         // 不再设置textAlign，交给CSS
@@ -1033,7 +1061,7 @@
             div.style.margin = '8px 0';
             div.style.alignSelf = 'flex-end';
         } else if(sender === 'ai') {
-            div.className = 'ai-message';
+            div.className = 'ai-message current-question'; // 给当前AI问题加类
         } else {
             div.className = 'chat-message';
         }
@@ -1049,39 +1077,18 @@
                 div.innerHTML = `<span class=\"typewriter-text\">${text}</span>`;
             }
         }
-        if (sender === 'ai') {
-            if (!options.skipLoading) {
-                showAILoading();
-                setTimeout(() => {
-                    removeAILoading();
-                    // 先闪烁两下光标
-                    div.innerHTML = `<span class=\"typewriter-text\"></span><span class=\"typewriter-cursor\">&nbsp;</span>`;
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    setTimeout(() => {
-                        setTimeout(() => {
-                            type();
-                        }, 500);
-                    }, 500);
-                }, 2000);
-            } else {
-                // 不显示loading，直接闪烁两下光标再打字
-                div.innerHTML = `<span class=\"typewriter-text\"></span><span class=\"typewriter-cursor\">&nbsp;</span>`;
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                setTimeout(() => {
-                    setTimeout(() => {
-                        type();
-                    }, 500);
-                }, 500);
-            }
-        } else {
-            type();
-        }
+        type();
     }
     function typeQuestion(text, skipLoading) {
         appendMessageWithProgress(text, 'ai', { skipLoading });
     }
     // 新增：带进度条推进的打字机效果
     function appendMessageWithProgress(text, sender, options = {}) {
+        // 只显示当前AI问题
+        chatMessages.innerHTML = '';
+        // 新增：移除旧的 current-question
+        const oldCurrent = chatMessages.querySelectorAll('.current-question');
+        oldCurrent.forEach(el => el.classList.remove('current-question'));
         const div = document.createElement('div');
         div.style.whiteSpace = 'pre-wrap';
         div.style.margin = '8px 0';
@@ -1098,7 +1105,7 @@
             div.style.margin = '8px 0';
             div.style.alignSelf = 'flex-end';
         } else if(sender === 'ai') {
-            div.className = 'ai-message';
+            div.className = 'ai-message current-question'; // 给当前AI问题加类
         } else {
             div.className = 'chat-message';
         }
@@ -1121,6 +1128,8 @@
                 if (!progressAdvanced) {
                     setQuestionProgress(userSubmitCount + 1);
                 }
+                // 渲染完后居中滚动
+                setTimeout(scrollCurrentQuestionToCenter, 80);
             }
         }
         if (sender === 'ai') {
@@ -1182,8 +1191,12 @@
         // setQuestionProgress(userSubmitCount + 1); // 移除
         if (userSubmitCount < questions.length) {
           setTimeout(() => {
-            showCurrentQuestion();
-          }, 400);
+            // 给所有消息加淡出动画
+            Array.from(chatMessages.children).forEach(el => el.classList.add('fade-out-up'));
+            setTimeout(() => {
+              showCurrentQuestion();
+            }, 400); // 动画结束后再清空并显示新问题
+          }, 1000);
         } else {
           // 所有问题答完，进入感谢页面
           setTimeout(showThankYouPage, 600);
@@ -1229,12 +1242,17 @@
     }
     // 选项题动画和UI还原
     function typeQuestionWithSelect(questionText, optionsArr) {
+      // 只显示当前AI问题
+      chatMessages.innerHTML = '';
+      // 新增：移除旧的 current-question
+      const oldCurrent = chatMessages.querySelectorAll('.current-question');
+      oldCurrent.forEach(el => el.classList.remove('current-question'));
       showAILoading();
       setTimeout(() => {
         removeAILoading();
         // 问题和选项容器
         const wrap = document.createElement('div');
-        wrap.className = 'select-question';
+        wrap.className = 'select-question current-question'; // 给当前AI问题加类
         wrap.style.display = 'flex';
         wrap.style.flexDirection = 'column';
         wrap.style.gap = '16px';
@@ -1269,6 +1287,8 @@
             }
             // 打字机动画结束后显示选项
             showSelectOptionsIn(wrap, optionsArr);
+            // 渲染完后居中滚动
+            setTimeout(scrollCurrentQuestionToCenter, 80);
           }
         }
         type();
@@ -1295,7 +1315,12 @@
           userSubmitCount++;
           setQuestionProgress(userSubmitCount);
           if (userSubmitCount < questions.length) {
-            showCurrentQuestion();
+            setTimeout(() => {
+              Array.from(chatMessages.children).forEach(el => el.classList.add('fade-out-up'));
+              setTimeout(() => {
+                showCurrentQuestion();
+              }, 400);
+            }, 1000);
           } else {
             setTimeout(showThankYouPage, 600);
           }
@@ -1332,12 +1357,19 @@
         chatSpace.style.display = 'none';
         thankPage.innerHTML = thankYouHTML;
         thankPage.style.display = 'flex';
-        thankPage.classList.add('fade-in');
+        thankPage.style.opacity = '0';
+        thankPage.style.transform = 'translateY(32px)';
+        // 触发淡入和上浮动画
+        setTimeout(() => {
+          thankPage.classList.add('fade-in-up');
+          thankPage.style.opacity = '1';
+          thankPage.style.transform = 'translateY(0)';
+        }, 20);
         // 绑定按钮事件
         const restartBtn = document.getElementById('restart-btn');
         if (restartBtn) {
           restartBtn.onclick = function() {
-            thankPage.classList.remove('fade-in');
+            thankPage.classList.remove('fade-in-up');
             thankPage.classList.add('fade-out');
             setTimeout(() => {
               thankPage.style.display = 'none';
@@ -1356,7 +1388,17 @@
             alert('Feedback clicked!');
           };
         }
-      }, 400);
+      }, 600); // 动画时长与.fade-out一致
+    }
+    // 新增：让当前问题在chatMessages中居中
+    function scrollCurrentQuestionToCenter() {
+      const chatMessages = document.getElementById('chat-messages');
+      const current = chatMessages.querySelector('.current-question');
+      if (!current) return;
+      const containerHeight = chatMessages.clientHeight;
+      const currentTop = current.offsetTop;
+      const currentHeight = current.offsetHeight;
+      chatMessages.scrollTop = currentTop - (containerHeight / 2) + (currentHeight / 2);
     }
     </script>
 </body>
